@@ -114,7 +114,15 @@ describe('The ToDo list container', () => {
       expect(pendingTasks[1]).toHaveTextContent('Task 3')
       expect(completedTasks[1]).toHaveTextContent('Task 4')
     })
+  })
 
-    it.todo('show diplay a text description for each task')
+  describe('adding new tasks', () => {
+    describe('the interface for adding new tasks', () => {
+      it.todo('should allow the user to enter a task description')
+
+      it.todo('should display a button to submit the task')
+
+      it.todo('should display the new task in the pending tasks area')
+    })
   })
 })
