@@ -1,7 +1,10 @@
 import React from 'react'
 import { render, screen, cleanup, within } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
 import { describe, expect, it, beforeEach } from 'vitest'
 import ToDoList, { ToDoListProps } from './ToDoList'
+
+const user = userEvent.setup()
 
 describe('The ToDo list container', () => {
   beforeEach(() => {
@@ -125,14 +128,32 @@ describe('The ToDo list container', () => {
       it('should allow the user to enter a task description', () => {
         render(<ToDoList tasks={[]} />)
 
-        expect(
-          screen.getByLabelText(/Task description/)
-        ).not.toBeInTheDocument()
+        expect(screen.getByLabelText(/Task description/)).toBeInTheDocument()
       })
 
-      it.todo('should display a button to submit the task')
+      it('should display a button to submit the task', () => {
+        render(<ToDoList tasks={[]} />)
 
-      it.todo('should display the new task in the pending tasks area')
+        expect(
+          screen.getByText(/Add task/, { selector: 'button' })
+        ).toBeInTheDocument()
+      })
+
+      it('should allow the user to input a description, click the submit button and see the newly created pending task', async () => {
+        render(<ToDoList tasks={[]} />)
+
+        const taskDescription = 'Wash the dishes'
+
+        const input = screen.getByLabelText(
+          /Task description/
+        ) as HTMLInputElement
+
+        await user.type(input, taskDescription)
+
+        await user.click(screen.getByText(/Add task/, { selector: 'button' }))
+
+        expect(screen.getByText(taskDescription)).toBeInTheDocument()
+      })
     })
   })
 })

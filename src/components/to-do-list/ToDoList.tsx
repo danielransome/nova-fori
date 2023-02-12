@@ -32,6 +32,8 @@ const ToDoList: React.FC<ToDoListProps> = ({ tasks }) => {
         <label>
           Task description: <input type="text" />
         </label>
+
+        <button type="submit">Add task</button>
       </form>
     </>
   )
