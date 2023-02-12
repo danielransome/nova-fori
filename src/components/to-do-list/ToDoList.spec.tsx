@@ -39,9 +39,9 @@ describe('The ToDo list container', () => {
 
       it('should display pending tasks in the pending area', () => {
         const tasks: Task[] = [
-          { description: 'Task 1' },
-          { description: 'Task 2' },
-          { description: 'Task 3' },
+          { description: 'Task 1', completed: false },
+          { description: 'Task 2', completed: false },
+          { description: 'Task 3', completed: false },
         ]
 
         render(<ToDoList tasks={tasks} />)
@@ -51,11 +51,30 @@ describe('The ToDo list container', () => {
         expect(pendingSection).not.toBeNull()
 
         const pendingTasks = within(pendingSection as HTMLElement).getAllByText(
-          /Task #/,
-          {}
+          /Task #/
         )
 
         expect(pendingTasks).toHaveLength(3)
+      })
+
+      it('should display completed tasks in the completed area', () => {
+        const tasks: Task[] = [
+          { description: 'Task 1', completed: true },
+          { description: 'Task 2', completed: true },
+          { description: 'Task 3', completed: true },
+        ]
+
+        render(<ToDoList tasks={tasks} />)
+
+        const completedSection =
+          screen.getByText(/Completed tasks/).parentElement ?? null
+        expect(completedSection).not.toBeNull()
+
+        const completedTasks = within(
+          completedSection as HTMLElement
+        ).getAllByText(/Task #/)
+
+        expect(completedTasks).toHaveLength(3)
       })
     })
 
