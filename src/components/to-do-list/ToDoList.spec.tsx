@@ -1,7 +1,7 @@
 import React from 'react'
 
 import { render, screen, cleanup, within } from '@testing-library/react'
-import { describe, expect, it, afterEach, beforeEach } from 'vitest'
+import { describe, expect, it, beforeEach } from 'vitest'
 import ToDoList, { Task } from './ToDoList'
 
 describe('The ToDo list container', () => {
