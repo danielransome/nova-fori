@@ -1,8 +1,7 @@
 import React from 'react'
-
 import { render, screen, cleanup, within } from '@testing-library/react'
 import { describe, expect, it, beforeEach } from 'vitest'
-import ToDoList, { Task } from './ToDoList'
+import ToDoList, { ToDoListProps } from './ToDoList'
 
 describe('The ToDo list container', () => {
   beforeEach(() => {
@@ -19,7 +18,7 @@ describe('The ToDo list container', () => {
 
   describe('when tasks exist', () => {
     it('should display all tasks', () => {
-      const tasks: Task[] = [
+      const tasks: ToDoListProps['tasks'] = [
         { description: 'Task 1', completed: false },
         { description: 'Task 2', completed: false },
         { description: 'Task 3', completed: false },
@@ -44,7 +43,7 @@ describe('The ToDo list container', () => {
       })
 
       it('should display pending tasks in the pending area', () => {
-        const tasks: Task[] = [
+        const tasks: ToDoListProps['tasks'] = [
           { description: 'Task 1', completed: false },
           { description: 'Task 2', completed: false },
           { description: 'Task 3', completed: false },
@@ -64,7 +63,7 @@ describe('The ToDo list container', () => {
       })
 
       it('should display completed tasks in the completed area', () => {
-        const tasks: Task[] = [
+        const tasks: ToDoListProps['tasks'] = [
           { description: 'Task 1', completed: true },
           { description: 'Task 2', completed: true },
           { description: 'Task 3', completed: true },
@@ -85,7 +84,7 @@ describe('The ToDo list container', () => {
     })
 
     it('should display tasks in the order they were added', () => {
-      const tasks: Task[] = [
+      const tasks: ToDoListProps['tasks'] = [
         { description: 'Task 1', completed: false },
         { description: 'Task 2', completed: true },
         { description: 'Task 3', completed: false },

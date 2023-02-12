@@ -1,12 +1,8 @@
 import React from 'react'
+import Task, { TaskProps } from './Task'
 
-export type Task = {
-  description: string
-  completed: boolean
-}
-
-type ToDoListProps = {
-  tasks: Task[]
+export type ToDoListProps = {
+  tasks: TaskProps[]
 }
 
 const ToDoList: React.FC<ToDoListProps> = ({ tasks }) => {
@@ -17,9 +13,7 @@ const ToDoList: React.FC<ToDoListProps> = ({ tasks }) => {
         {tasks
           .filter((t) => t.completed)
           .map((task, index) => (
-            <div key={index}>
-              <h3>{task.description}</h3>
-            </div>
+            <Task key={index} {...task} />
           ))}
       </div>
 
@@ -28,9 +22,7 @@ const ToDoList: React.FC<ToDoListProps> = ({ tasks }) => {
         {tasks
           .filter((t) => !t.completed)
           .map((task, index) => (
-            <div key={index}>
-              <h3>{task.description}</h3>
-            </div>
+            <Task key={index} {...task} />
           ))}
       </div>
     </div>
