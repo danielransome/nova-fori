@@ -1,7 +1,11 @@
 import React from 'react'
 
+export type Task = {
+  description: string
+}
+
 type ToDoListProps = {
-  tasks: Array<unknown>
+  tasks: Task[]
 }
 
 const ToDoList: React.FC<ToDoListProps> = ({ tasks }) => {
@@ -13,13 +17,12 @@ const ToDoList: React.FC<ToDoListProps> = ({ tasks }) => {
 
       <div>
         <h2>Pending tasks</h2>
+        {tasks.map((task, index) => (
+          <div key={index}>
+            <h3>Task #{index + 1}</h3>
+          </div>
+        ))}
       </div>
-
-      {tasks.map((task, index) => (
-        <div key={index}>
-          <h3>Task #{index + 1}</h3>
-        </div>
-      ))}
     </div>
   )
 }

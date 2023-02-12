@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { render, screen, cleanup } from '@testing-library/react'
+import { render, screen, cleanup, within } from '@testing-library/react'
 import { describe, expect, it, afterEach, beforeEach } from 'vitest'
-import ToDoList from './ToDoList'
+import ToDoList, { Task } from './ToDoList'
 
 describe('The ToDo list container', () => {
   beforeEach(() => {
@@ -35,6 +35,27 @@ describe('The ToDo list container', () => {
         render(<ToDoList tasks={[]} />)
 
         expect(screen.getByText(/Pending tasks/)).toBeInTheDocument()
+      })
+
+      it('should display pending tasks in the pending area', () => {
+        const tasks: Task[] = [
+          { description: 'Task 1' },
+          { description: 'Task 2' },
+          { description: 'Task 3' },
+        ]
+
+        render(<ToDoList tasks={tasks} />)
+
+        const pendingSection =
+          screen.getByText(/Pending tasks/).parentElement ?? null
+        expect(pendingSection).not.toBeNull()
+
+        const pendingTasks = within(pendingSection as HTMLElement).getAllByText(
+          /Task #/,
+          {}
+        )
+
+        expect(pendingTasks).toHaveLength(3)
       })
     })
 
