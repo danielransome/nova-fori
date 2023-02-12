@@ -1,10 +1,12 @@
 import React from 'react'
 import { render, screen, cleanup, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { describe, expect, it, beforeEach } from 'vitest'
+import { describe, expect, it, beforeEach, vi } from 'vitest'
 import ToDoList, { ToDoListProps } from './ToDoList'
 
 const user = userEvent.setup()
+
+const spy__onSubmitNewTask = vi.fn()
 
 describe('The ToDo list container', () => {
   beforeEach(() => {
@@ -13,7 +15,7 @@ describe('The ToDo list container', () => {
 
   describe('when there are no tasks to display', () => {
     it('should have an empty list', () => {
-      render(<ToDoList tasks={[]} />)
+      render(<ToDoList tasks={[]} onSubmitNewTask={spy__onSubmitNewTask} />)
 
       expect(
         within(screen.getByTestId('to-do-list')).queryByText(/Task/)
@@ -29,7 +31,7 @@ describe('The ToDo list container', () => {
         { description: 'Task 3', completed: false },
       ]
 
-      render(<ToDoList tasks={tasks} />)
+      render(<ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />)
 
       expect(
         within(screen.getByTestId('to-do-list')).queryAllByText(/Task/)
@@ -38,13 +40,13 @@ describe('The ToDo list container', () => {
 
     describe('should display tasks in two groups: completed and pending', () => {
       it('should have an area for completed tasks', () => {
-        render(<ToDoList tasks={[]} />)
+        render(<ToDoList tasks={[]} onSubmitNewTask={spy__onSubmitNewTask} />)
 
         expect(screen.getByText(/Completed tasks/)).toBeInTheDocument()
       })
 
       it('should have an area for pending tasks', () => {
-        render(<ToDoList tasks={[]} />)
+        render(<ToDoList tasks={[]} onSubmitNewTask={spy__onSubmitNewTask} />)
 
         expect(screen.getByText(/Pending tasks/)).toBeInTheDocument()
       })
@@ -56,7 +58,9 @@ describe('The ToDo list container', () => {
           { description: 'Task 3', completed: false },
         ]
 
-        render(<ToDoList tasks={tasks} />)
+        render(
+          <ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />
+        )
 
         const pendingSection =
           screen.getByText(/Pending tasks/).parentElement ?? null
@@ -76,7 +80,9 @@ describe('The ToDo list container', () => {
           { description: 'Task 3', completed: true },
         ]
 
-        render(<ToDoList tasks={tasks} />)
+        render(
+          <ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />
+        )
 
         const completedSection =
           screen.getByText(/Completed tasks/).parentElement ?? null
@@ -98,7 +104,7 @@ describe('The ToDo list container', () => {
         { description: 'Task 4', completed: true },
       ]
 
-      render(<ToDoList tasks={tasks} />)
+      render(<ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />)
 
       const pendingSection =
         screen.getByText(/Pending tasks/).parentElement ?? null
@@ -126,13 +132,13 @@ describe('The ToDo list container', () => {
   describe('adding new tasks', () => {
     describe('the interface for adding new tasks', () => {
       it('should allow the user to enter a task description', () => {
-        render(<ToDoList tasks={[]} />)
+        render(<ToDoList tasks={[]} onSubmitNewTask={spy__onSubmitNewTask} />)
 
         expect(screen.getByLabelText(/Task description/)).toBeInTheDocument()
       })
 
       it('should display a button to submit the task', () => {
-        render(<ToDoList tasks={[]} />)
+        render(<ToDoList tasks={[]} onSubmitNewTask={spy__onSubmitNewTask} />)
 
         expect(
           screen.getByText(/Add task/, { selector: 'button' })
@@ -140,7 +146,14 @@ describe('The ToDo list container', () => {
       })
 
       it('should allow the user to input a description, click the submit button and see the newly created pending task', async () => {
-        render(<ToDoList tasks={[]} />)
+        const state: ToDoListProps['tasks'] = []
+        spy__onSubmitNewTask.mockImplementationOnce((description: string) => {
+          state.push({ description, completed: false })
+        })
+
+        render(
+          <ToDoList tasks={state} onSubmitNewTask={spy__onSubmitNewTask} />
+        )
 
         const taskDescription = 'Wash the dishes'
 
