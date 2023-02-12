@@ -12,7 +12,9 @@ describe('The ToDo list container', () => {
     it('should have an empty list', () => {
       render(<ToDoList tasks={[]} />)
 
-      expect(screen.queryByText(/Task/)).toBeNull()
+      expect(
+        within(screen.getByTestId('to-do-list')).queryByText(/Task/)
+      ).toBeNull()
     })
   })
 
@@ -26,7 +28,9 @@ describe('The ToDo list container', () => {
 
       render(<ToDoList tasks={tasks} />)
 
-      expect(screen.getAllByText(/Task/)).toHaveLength(tasks.length)
+      expect(
+        within(screen.getByTestId('to-do-list')).queryAllByText(/Task/)
+      ).toHaveLength(tasks.length)
     })
 
     describe('should display tasks in two groups: completed and pending', () => {
@@ -118,7 +122,13 @@ describe('The ToDo list container', () => {
 
   describe('adding new tasks', () => {
     describe('the interface for adding new tasks', () => {
-      it.todo('should allow the user to enter a task description')
+      it('should allow the user to enter a task description', () => {
+        render(<ToDoList tasks={[]} />)
+
+        expect(
+          screen.getByLabelText(/Task description/)
+        ).not.toBeInTheDocument()
+      })
 
       it.todo('should display a button to submit the task')
 
