@@ -18,7 +18,7 @@ const ToDoList: React.FC<ToDoListProps> = ({ tasks }) => {
           .filter((t) => t.completed)
           .map((task, index) => (
             <div key={index}>
-              <h3>Task #{index + 1}</h3>
+              <h3>{task.description}</h3>
             </div>
           ))}
       </div>
@@ -29,7 +29,7 @@ const ToDoList: React.FC<ToDoListProps> = ({ tasks }) => {
           .filter((t) => !t.completed)
           .map((task, index) => (
             <div key={index}>
-              <h3>Task #{index + 1}</h3>
+              <h3>{task.description}</h3>
             </div>
           ))}
       </div>

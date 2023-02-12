@@ -13,15 +13,21 @@ describe('The ToDo list container', () => {
     it('should have an empty list', () => {
       render(<ToDoList tasks={[]} />)
 
-      expect(screen.queryByText(/Task #/)).toBeNull()
+      expect(screen.queryByText(/Task/)).toBeNull()
     })
   })
 
   describe('when tasks exist', () => {
     it('should display all tasks', () => {
-      render(<ToDoList tasks={Array(5).fill(0)} />)
+      const tasks: Task[] = [
+        { description: 'Task 1', completed: false },
+        { description: 'Task 2', completed: false },
+        { description: 'Task 3', completed: false },
+      ]
 
-      expect(screen.getAllByText(/Task #/)).toHaveLength(5)
+      render(<ToDoList tasks={tasks} />)
+
+      expect(screen.getAllByText(/Task/)).toHaveLength(tasks.length)
     })
 
     describe('should display tasks in two groups: completed and pending', () => {
@@ -51,7 +57,7 @@ describe('The ToDo list container', () => {
         expect(pendingSection).not.toBeNull()
 
         const pendingTasks = within(pendingSection as HTMLElement).getAllByText(
-          /Task #/
+          /Task/
         )
 
         expect(pendingTasks).toHaveLength(3)
@@ -72,13 +78,43 @@ describe('The ToDo list container', () => {
 
         const completedTasks = within(
           completedSection as HTMLElement
-        ).getAllByText(/Task #/)
+        ).getAllByText(/Task/)
 
         expect(completedTasks).toHaveLength(3)
       })
     })
 
-    it.todo('should display tasks in the order they were added')
+    it('should display tasks in the order they were added', () => {
+      const tasks: Task[] = [
+        { description: 'Task 1', completed: false },
+        { description: 'Task 2', completed: true },
+        { description: 'Task 3', completed: false },
+        { description: 'Task 4', completed: true },
+      ]
+
+      render(<ToDoList tasks={tasks} />)
+
+      const pendingSection =
+        screen.getByText(/Pending tasks/).parentElement ?? null
+      expect(pendingSection).not.toBeNull()
+
+      const completedSection =
+        screen.getByText(/Completed tasks/).parentElement ?? null
+      expect(completedSection).not.toBeNull()
+
+      const pendingTasks = within(pendingSection as HTMLElement).getAllByText(
+        /Task/
+      )
+
+      const completedTasks = within(
+        completedSection as HTMLElement
+      ).getAllByText(/Task/)
+
+      expect(pendingTasks[0]).toHaveTextContent('Task 1')
+      expect(completedTasks[0]).toHaveTextContent('Task 2')
+      expect(pendingTasks[1]).toHaveTextContent('Task 3')
+      expect(completedTasks[1]).toHaveTextContent('Task 4')
+    })
 
     it.todo('show diplay a text description for each task')
   })
