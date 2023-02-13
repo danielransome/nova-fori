@@ -1,4 +1,5 @@
 import React from 'react'
+import CreateTaskForm from './CreateTaskForm'
 import Task, { TaskProps } from './Task'
 
 export type ToDoListProps = {
@@ -7,15 +8,6 @@ export type ToDoListProps = {
 }
 
 const ToDoList: React.FC<ToDoListProps> = ({ tasks, onSubmitNewTask }) => {
-  const [newTaskDescription, setNewTaskDescription] = React.useState('')
-
-  const onSubmitNewTaskForm = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-
-    onSubmitNewTask(newTaskDescription)
-    setNewTaskDescription('')
-  }
-
   return (
     <>
       <div data-testid="to-do-list">
@@ -38,18 +30,7 @@ const ToDoList: React.FC<ToDoListProps> = ({ tasks, onSubmitNewTask }) => {
         </div>
       </div>
 
-      <form onSubmit={onSubmitNewTaskForm}>
-        <label>
-          Task description:{' '}
-          <input
-            type="text"
-            value={newTaskDescription}
-            onChange={({ target }) => setNewTaskDescription(target.value)}
-          />
-        </label>
-
-        <button type="submit">Add task</button>
-      </form>
+      <CreateTaskForm onSubmitEvent={onSubmitNewTask} />
     </>
   )
 }

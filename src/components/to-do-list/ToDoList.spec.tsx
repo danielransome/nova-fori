@@ -1,5 +1,11 @@
 import React from 'react'
-import { render, screen, cleanup, within } from '@testing-library/react'
+import {
+  render,
+  screen,
+  cleanup,
+  within,
+  waitFor,
+} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, beforeEach, vi } from 'vitest'
 import ToDoList, { ToDoListProps } from './ToDoList'
@@ -146,26 +152,39 @@ describe('The ToDo list container', () => {
       })
 
       it('should allow the user to input a description, click the submit button and see the newly created pending task', async () => {
-        const state: ToDoListProps['tasks'] = []
-        spy__onSubmitNewTask.mockImplementationOnce((description: string) => {
-          state.push({ description, completed: false })
+        let mock__tasks: ToDoListProps['tasks'] = []
+
+        spy__onSubmitNewTask.mockImplementation((desc) => {
+          mock__tasks = [
+            ...mock__tasks,
+            { description: desc, completed: false },
+          ]
         })
 
-        render(
-          <ToDoList tasks={state} onSubmitNewTask={spy__onSubmitNewTask} />
+        const { rerender } = render(
+          <ToDoList
+            tasks={mock__tasks}
+            onSubmitNewTask={spy__onSubmitNewTask}
+          />
         )
 
-        const taskDescription = 'Wash the dishes'
-
+        const description = 'Task 1'
         const input = screen.getByLabelText(
           /Task description/
         ) as HTMLInputElement
+        const button = screen.getByText(/Add task/, { selector: 'button' })
 
-        await user.type(input, taskDescription)
+        await user.type(input, description)
+        await user.click(button)
 
-        await user.click(screen.getByText(/Add task/, { selector: 'button' }))
+        rerender(
+          <ToDoList
+            tasks={mock__tasks}
+            onSubmitNewTask={spy__onSubmitNewTask}
+          />
+        )
 
-        expect(screen.getByText(taskDescription)).toBeInTheDocument()
+        expect(screen.getByText(description)).toBeInTheDocument()
       })
     })
   })
