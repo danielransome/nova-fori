@@ -1,11 +1,5 @@
 import React from 'react'
-import {
-  render,
-  screen,
-  cleanup,
-  within,
-  waitFor,
-} from '@testing-library/react'
+import { render, screen, cleanup, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, beforeEach, vi } from 'vitest'
 import ToDoList, { ToDoListProps } from './ToDoList'

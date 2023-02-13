@@ -15,4 +15,12 @@ describe('The Task component', () => {
 
     expect(screen.getByText(description)).toBeInTheDocument()
   })
+
+  describe('changing the task status', () => {
+    it('should have a checkbox to mark the task as completed', () => {
+      render(<Task description="Task 1" completed={false} />)
+
+      expect(screen.getByLabelText(/Completed/)).toBeInTheDocument()
+    })
+  })
 })
