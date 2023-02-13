@@ -151,7 +151,7 @@ describe('The ToDo list container', () => {
         ).toBeInTheDocument()
       })
 
-      it('should allow the user to input a description, click the submit button and see the newly created pending task', async () => {
+      it('should allow the user to input a description, click the submit button and see the newly created pending task in the pending area', async () => {
         let mock__tasks: ToDoListProps['tasks'] = []
 
         spy__onSubmitNewTask.mockImplementation((desc) => {
@@ -184,7 +184,14 @@ describe('The ToDo list container', () => {
           />
         )
 
-        expect(screen.getByText(description)).toBeInTheDocument()
+        const pendingSection =
+          screen.getByText(/Pending tasks/).parentElement ?? null
+
+        const pendingTasks = within(pendingSection as HTMLElement).getAllByText(
+          description
+        )
+
+        expect(pendingTasks).toHaveLength(1)
       })
     })
   })
