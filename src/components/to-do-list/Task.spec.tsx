@@ -6,6 +6,8 @@ import userEvent from '@testing-library/user-event'
 
 const user = userEvent.setup()
 
+const spy__onToggleCompleted = vi.fn()
+
 describe('The Task component', () => {
   beforeEach(() => {
     cleanup()
@@ -14,7 +16,13 @@ describe('The Task component', () => {
   it('should render the task description', () => {
     const description = 'Task 1'
 
-    render(<Task description={description} completed={false} />)
+    render(
+      <Task
+        description={description}
+        completed={false}
+        onToggleCompleted={spy__onToggleCompleted}
+      />
+    )
 
     expect(screen.getByText(description)).toBeInTheDocument()
   })
@@ -22,19 +30,37 @@ describe('The Task component', () => {
   describe('changing the task status', () => {
     describe('the checkbox', () => {
       it('should exist', () => {
-        render(<Task description="Task 1" completed={false} />)
+        render(
+          <Task
+            description="Task 1"
+            completed={false}
+            onToggleCompleted={spy__onToggleCompleted}
+          />
+        )
 
         expect(screen.getByLabelText(/Completed/)).toBeInTheDocument()
       })
 
       it('should be unchecked by default', () => {
-        render(<Task description="Task 1" completed={false} />)
+        render(
+          <Task
+            description="Task 1"
+            completed={false}
+            onToggleCompleted={spy__onToggleCompleted}
+          />
+        )
 
         expect(screen.getByLabelText(/Completed/)).not.toBeChecked()
       })
 
       it('should be checked when the task is completed', () => {
-        render(<Task description="Task 1" completed={true} />)
+        render(
+          <Task
+            description="Task 1"
+            completed={true}
+            onToggleCompleted={spy__onToggleCompleted}
+          />
+        )
 
         expect(screen.getByLabelText(/Completed/)).toBeChecked()
       })
