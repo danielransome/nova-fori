@@ -1,7 +1,10 @@
 import React from 'react'
 import { render, screen, cleanup } from '@testing-library/react'
-import { describe, expect, it, beforeEach } from 'vitest'
+import { describe, expect, it, beforeEach, vi } from 'vitest'
 import Task from './Task'
+import userEvent from '@testing-library/user-event'
+
+const user = userEvent.setup()
 
 describe('The Task component', () => {
   beforeEach(() => {
@@ -34,6 +37,24 @@ describe('The Task component', () => {
         render(<Task description="Task 1" completed={true} />)
 
         expect(screen.getByLabelText(/Completed/)).toBeChecked()
+      })
+    })
+
+    describe('user interaction', () => {
+      it('should call the callback when the checkbox value is changed', async () => {
+        const spy__onChange = vi.fn()
+
+        render(
+          <Task
+            description="Task 1"
+            completed={false}
+            onChange={spy__onChange}
+          />
+        )
+
+        await user.click(screen.getByLabelText(/Completed/))
+
+        expect(spy__onChange).toHaveBeenCalled()
       })
     })
   })

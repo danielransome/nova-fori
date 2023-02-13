@@ -11,7 +11,7 @@ const Task: React.FC<TaskProps> = ({ description, completed }) => {
       <h3>{description}</h3>
 
       <label>
-        Completed <input type="checkbox" />
+        Completed <input type="checkbox" checked={completed} readOnly />
       </label>
     </div>
   )
