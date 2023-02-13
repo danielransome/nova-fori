@@ -137,20 +137,6 @@ describe('The ToDo list container', () => {
 
   describe('adding new tasks', () => {
     describe('the interface for adding new tasks', () => {
-      it('should allow the user to enter a task description', () => {
-        render(<ToDoList tasks={[]} onSubmitNewTask={spy__onSubmitNewTask} />)
-
-        expect(screen.getByLabelText(/Task description/)).toBeInTheDocument()
-      })
-
-      it('should display a button to submit the task', () => {
-        render(<ToDoList tasks={[]} onSubmitNewTask={spy__onSubmitNewTask} />)
-
-        expect(
-          screen.getByText(/Add task/, { selector: 'button' })
-        ).toBeInTheDocument()
-      })
-
       it('should allow the user to input a description, click the submit button and see the newly created pending task in the pending area', async () => {
         let mock__tasks: ToDoListProps['tasks'] = []
 
