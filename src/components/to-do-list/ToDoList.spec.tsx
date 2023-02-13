@@ -17,7 +17,13 @@ describe('The ToDo list container', () => {
 
   describe('when there are no tasks to display', () => {
     it('should have an empty list', () => {
-      render(<ToDoList tasks={[]} onSubmitNewTask={spy__onSubmitNewTask} />)
+      render(
+        <ToDoList
+          tasks={[]}
+          onSubmitNewTask={spy__onSubmitNewTask}
+          onToggleCompleted={spy__onToggleCompleted}
+        />
+      )
 
       expect(
         within(screen.getByTestId('to-do-list')).queryByText(/Task/)
@@ -29,7 +35,13 @@ describe('The ToDo list container', () => {
     it('should display all tasks', () => {
       const tasks: ToDoListProps['tasks'] = generateTasks(3)
 
-      render(<ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />)
+      render(
+        <ToDoList
+          tasks={tasks}
+          onSubmitNewTask={spy__onSubmitNewTask}
+          onToggleCompleted={spy__onToggleCompleted}
+        />
+      )
 
       expect(
         within(screen.getByTestId('to-do-list')).queryAllByText(/Task/)
@@ -38,13 +50,25 @@ describe('The ToDo list container', () => {
 
     describe('should display tasks in two groups: completed and pending', () => {
       it('should have an area for completed tasks', () => {
-        render(<ToDoList tasks={[]} onSubmitNewTask={spy__onSubmitNewTask} />)
+        render(
+          <ToDoList
+            tasks={[]}
+            onSubmitNewTask={spy__onSubmitNewTask}
+            onToggleCompleted={spy__onToggleCompleted}
+          />
+        )
 
         expect(screen.getByText(/Completed tasks/)).toBeInTheDocument()
       })
 
       it('should have an area for pending tasks', () => {
-        render(<ToDoList tasks={[]} onSubmitNewTask={spy__onSubmitNewTask} />)
+        render(
+          <ToDoList
+            tasks={[]}
+            onSubmitNewTask={spy__onSubmitNewTask}
+            onToggleCompleted={spy__onToggleCompleted}
+          />
+        )
 
         expect(screen.getByText(/Pending tasks/)).toBeInTheDocument()
       })
@@ -53,7 +77,11 @@ describe('The ToDo list container', () => {
         const tasks: ToDoListProps['tasks'] = generateTasks(3)
 
         render(
-          <ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />
+          <ToDoList
+            tasks={tasks}
+            onSubmitNewTask={spy__onSubmitNewTask}
+            onToggleCompleted={spy__onToggleCompleted}
+          />
         )
 
         const pendingSection =
@@ -71,7 +99,11 @@ describe('The ToDo list container', () => {
         const tasks: ToDoListProps['tasks'] = generateTasks(3, true)
 
         render(
-          <ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />
+          <ToDoList
+            tasks={tasks}
+            onSubmitNewTask={spy__onSubmitNewTask}
+            onToggleCompleted={spy__onToggleCompleted}
+          />
         )
 
         const completedSection =
@@ -89,28 +121,34 @@ describe('The ToDo list container', () => {
     it('should display tasks in the order they were added', () => {
       const tasks: ToDoListProps['tasks'] = [
         {
+          id: '1',
           description: 'Task 1',
           completed: false,
-          onToggleCompleted: spy__onToggleCompleted,
         },
         {
+          id: '2',
           description: 'Task 2',
           completed: true,
-          onToggleCompleted: spy__onToggleCompleted,
         },
         {
+          id: '3',
           description: 'Task 3',
           completed: false,
-          onToggleCompleted: spy__onToggleCompleted,
         },
         {
+          id: '4',
           description: 'Task 4',
           completed: true,
-          onToggleCompleted: spy__onToggleCompleted,
         },
       ]
 
-      render(<ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />)
+      render(
+        <ToDoList
+          tasks={tasks}
+          onSubmitNewTask={spy__onSubmitNewTask}
+          onToggleCompleted={spy__onToggleCompleted}
+        />
+      )
 
       const pendingSection =
         screen.getByText(/Pending tasks/).parentElement ?? null
@@ -148,6 +186,7 @@ describe('The ToDo list container', () => {
           <ToDoList
             tasks={mock__tasks}
             onSubmitNewTask={spy__onSubmitNewTask}
+            onToggleCompleted={spy__onToggleCompleted}
           />
         )
 
@@ -164,6 +203,7 @@ describe('The ToDo list container', () => {
           <ToDoList
             tasks={mock__tasks}
             onSubmitNewTask={spy__onSubmitNewTask}
+            onToggleCompleted={spy__onToggleCompleted}
           />
         )
 
@@ -190,7 +230,11 @@ describe('The ToDo list container', () => {
       })
 
       const { rerender } = render(
-        <ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />
+        <ToDoList
+          tasks={tasks}
+          onSubmitNewTask={spy__onSubmitNewTask}
+          onToggleCompleted={spy__onToggleCompleted}
+        />
       )
 
       const pendingSection = screen.getByText(/Pending tasks/).parentElement
@@ -214,7 +258,11 @@ describe('The ToDo list container', () => {
       )
 
       rerender(
-        <ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />
+        <ToDoList
+          tasks={tasks}
+          onSubmitNewTask={spy__onSubmitNewTask}
+          onToggleCompleted={spy__onToggleCompleted}
+        />
       )
 
       expect(spy__onToggleCompleted).toHaveBeenCalledTimes(1)
@@ -235,6 +283,7 @@ function generateTasks(n: number, completed = false): TaskProps[] {
 
   for (let i = 0; i < n; i++) {
     tasks.push({
+      id: i.toString(),
       description: `Task ${i + 1}`,
       completed,
       onToggleCompleted: spy__onToggleCompleted,

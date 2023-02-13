@@ -3,11 +3,16 @@ import CreateTaskForm from './CreateTaskForm'
 import Task, { TaskProps } from './Task'
 
 export type ToDoListProps = {
-  tasks: TaskProps[]
+  tasks: Omit<TaskProps, 'onToggleCompleted'>[]
   onSubmitNewTask: (description: string) => void
+  onToggleCompleted: (id: string) => void
 }
 
-const ToDoList: React.FC<ToDoListProps> = ({ tasks, onSubmitNewTask }) => {
+const ToDoList: React.FC<ToDoListProps> = ({
+  tasks,
+  onSubmitNewTask,
+  onToggleCompleted,
+}) => {
   return (
     <>
       <div data-testid="to-do-list">
@@ -16,7 +21,11 @@ const ToDoList: React.FC<ToDoListProps> = ({ tasks, onSubmitNewTask }) => {
           {tasks
             .filter((t) => t.completed)
             .map((task, index) => (
-              <Task key={index} {...task} />
+              <Task
+                key={index}
+                {...task}
+                onToggleCompleted={onToggleCompleted}
+              />
             ))}
         </div>
 
@@ -25,7 +34,11 @@ const ToDoList: React.FC<ToDoListProps> = ({ tasks, onSubmitNewTask }) => {
           {tasks
             .filter((t) => !t.completed)
             .map((task, index) => (
-              <Task key={index} {...task} />
+              <Task
+                key={index}
+                {...task}
+                onToggleCompleted={onToggleCompleted}
+              />
             ))}
         </div>
       </div>
