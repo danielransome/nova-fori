@@ -48,13 +48,13 @@ describe('The Task component', () => {
           <Task
             description="Task 1"
             completed={false}
-            onChange={spy__onChange}
+            onToggleCompleted={spy__onChange}
           />
         )
 
         await user.click(screen.getByLabelText(/Completed/))
 
-        expect(spy__onChange).toHaveBeenCalled()
+        expect(spy__onChange).toHaveBeenCalledTimes(1)
       })
     })
   })
