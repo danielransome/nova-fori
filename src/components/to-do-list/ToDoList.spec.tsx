@@ -3,10 +3,12 @@ import { render, screen, cleanup, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, expect, it, beforeEach, vi } from 'vitest'
 import ToDoList, { ToDoListProps } from './ToDoList'
+import { TaskProps } from './Task'
 
 const user = userEvent.setup()
 
 const spy__onSubmitNewTask = vi.fn()
+const spy__onToggleCompleted = vi.fn()
 
 describe('The ToDo list container', () => {
   beforeEach(() => {
@@ -25,11 +27,7 @@ describe('The ToDo list container', () => {
 
   describe('when tasks exist', () => {
     it('should display all tasks', () => {
-      const tasks: ToDoListProps['tasks'] = [
-        { description: 'Task 1', completed: false },
-        { description: 'Task 2', completed: false },
-        { description: 'Task 3', completed: false },
-      ]
+      const tasks: ToDoListProps['tasks'] = generateTasks(3)
 
       render(<ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />)
 
@@ -52,11 +50,7 @@ describe('The ToDo list container', () => {
       })
 
       it('should display pending tasks in the pending area', () => {
-        const tasks: ToDoListProps['tasks'] = [
-          { description: 'Task 1', completed: false },
-          { description: 'Task 2', completed: false },
-          { description: 'Task 3', completed: false },
-        ]
+        const tasks: ToDoListProps['tasks'] = generateTasks(3)
 
         render(
           <ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />
@@ -74,11 +68,7 @@ describe('The ToDo list container', () => {
       })
 
       it('should display completed tasks in the completed area', () => {
-        const tasks: ToDoListProps['tasks'] = [
-          { description: 'Task 1', completed: true },
-          { description: 'Task 2', completed: true },
-          { description: 'Task 3', completed: true },
-        ]
+        const tasks: ToDoListProps['tasks'] = generateTasks(3, true)
 
         render(
           <ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />
@@ -98,10 +88,26 @@ describe('The ToDo list container', () => {
 
     it('should display tasks in the order they were added', () => {
       const tasks: ToDoListProps['tasks'] = [
-        { description: 'Task 1', completed: false },
-        { description: 'Task 2', completed: true },
-        { description: 'Task 3', completed: false },
-        { description: 'Task 4', completed: true },
+        {
+          description: 'Task 1',
+          completed: false,
+          onToggleCompleted: spy__onToggleCompleted,
+        },
+        {
+          description: 'Task 2',
+          completed: true,
+          onToggleCompleted: spy__onToggleCompleted,
+        },
+        {
+          description: 'Task 3',
+          completed: false,
+          onToggleCompleted: spy__onToggleCompleted,
+        },
+        {
+          description: 'Task 4',
+          completed: true,
+          onToggleCompleted: spy__onToggleCompleted,
+        },
       ]
 
       render(<ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />)
@@ -135,10 +141,7 @@ describe('The ToDo list container', () => {
         let mock__tasks: ToDoListProps['tasks'] = []
 
         spy__onSubmitNewTask.mockImplementation((desc) => {
-          mock__tasks = [
-            ...mock__tasks,
-            { description: desc, completed: false },
-          ]
+          mock__tasks = [...mock__tasks, generateTasks(1)[0]]
         })
 
         const { rerender } = render(
@@ -176,3 +179,17 @@ describe('The ToDo list container', () => {
     })
   })
 })
+
+function generateTasks(n: number, completed = false): TaskProps[] {
+  const tasks: TaskProps[] = []
+
+  for (let i = 0; i < n; i++) {
+    tasks.push({
+      description: `Task ${i + 1}`,
+      completed,
+      onToggleCompleted: spy__onToggleCompleted,
+    })
+  }
+
+  return tasks
+}
