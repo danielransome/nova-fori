@@ -17,10 +17,24 @@ describe('The Task component', () => {
   })
 
   describe('changing the task status', () => {
-    it('should have a checkbox to mark the task as completed', () => {
-      render(<Task description="Task 1" completed={false} />)
+    describe('the checkbox', () => {
+      it('should exist', () => {
+        render(<Task description="Task 1" completed={false} />)
 
-      expect(screen.getByLabelText(/Completed/)).toBeInTheDocument()
+        expect(screen.getByLabelText(/Completed/)).toBeInTheDocument()
+      })
+
+      it('should be unchecked by default', () => {
+        render(<Task description="Task 1" completed={false} />)
+
+        expect(screen.getByLabelText(/Completed/)).not.toBeChecked()
+      })
+
+      it('should be checked when the task is completed', () => {
+        render(<Task description="Task 1" completed={true} />)
+
+        expect(screen.getByLabelText(/Completed/)).toBeChecked()
+      })
     })
   })
 })
