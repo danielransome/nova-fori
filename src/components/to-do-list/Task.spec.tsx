@@ -6,6 +6,8 @@ import userEvent from '@testing-library/user-event'
 
 const user = userEvent.setup()
 
+const mock__taskID = '1234'
+
 const spy__onToggleCompleted = vi.fn()
 
 describe('The Task component', () => {
@@ -18,6 +20,7 @@ describe('The Task component', () => {
 
     render(
       <Task
+        id={mock__taskID}
         description={description}
         completed={false}
         onToggleCompleted={spy__onToggleCompleted}
@@ -27,11 +30,30 @@ describe('The Task component', () => {
     expect(screen.getByText(description)).toBeInTheDocument()
   })
 
+  it('should have an ID', () => {
+    const description = 'Task 1'
+
+    render(
+      <Task
+        id={mock__taskID}
+        description={description}
+        completed={false}
+        onToggleCompleted={spy__onToggleCompleted}
+      />
+    )
+
+    expect(screen.getByText(description).parentNode).toHaveAttribute(
+      'data-id',
+      mock__taskID
+    )
+  })
+
   describe('changing the task status', () => {
     describe('the checkbox', () => {
       it('should exist', () => {
         render(
           <Task
+            id={mock__taskID}
             description="Task 1"
             completed={false}
             onToggleCompleted={spy__onToggleCompleted}
@@ -44,6 +66,7 @@ describe('The Task component', () => {
       it('should be unchecked by default', () => {
         render(
           <Task
+            id={mock__taskID}
             description="Task 1"
             completed={false}
             onToggleCompleted={spy__onToggleCompleted}
@@ -56,6 +79,7 @@ describe('The Task component', () => {
       it('should be checked when the task is completed', () => {
         render(
           <Task
+            id={mock__taskID}
             description="Task 1"
             completed={true}
             onToggleCompleted={spy__onToggleCompleted}
@@ -72,6 +96,7 @@ describe('The Task component', () => {
 
         render(
           <Task
+            id={mock__taskID}
             description="Task 1"
             completed={false}
             onToggleCompleted={spy__onChange}
