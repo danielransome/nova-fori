@@ -178,6 +178,56 @@ describe('The ToDo list container', () => {
       })
     })
   })
+
+  describe('toggling the completion status of a task', () => {
+    it('should move the task from the pending area to the completed area when the task is marked as completed', async () => {
+      const tasks: ToDoListProps['tasks'] = generateTasks(1)
+      const taskDescription = tasks[0].description
+      const checkboxLabel = 'Completed'
+
+      spy__onToggleCompleted.mockImplementation(() => {
+        tasks[0].completed = true
+      })
+
+      const { rerender } = render(
+        <ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />
+      )
+
+      const pendingSection = screen.getByText(/Pending tasks/).parentElement
+
+      const pendingTasks = within(pendingSection as HTMLElement).getAllByText(
+        taskDescription
+      )
+      expect(pendingTasks).toHaveLength(1)
+
+      const completedSection = screen.getByText(/Completed tasks/).parentElement
+
+      const completedTasks = within(
+        completedSection as HTMLElement
+      ).queryAllByText(taskDescription)
+
+      expect(completedTasks).toHaveLength(0)
+
+      const taskToClick = screen.getByText(taskDescription).parentElement
+      await user.click(
+        within(taskToClick as HTMLElement).getByLabelText(checkboxLabel)
+      )
+
+      rerender(
+        <ToDoList tasks={tasks} onSubmitNewTask={spy__onSubmitNewTask} />
+      )
+
+      expect(spy__onToggleCompleted).toHaveBeenCalledTimes(1)
+
+      expect(
+        within(pendingSection as HTMLElement).queryAllByText(taskDescription)
+      ).toHaveLength(0)
+
+      expect(
+        within(completedSection as HTMLElement).getAllByText(taskDescription)
+      ).toHaveLength(1)
+    })
+  })
 })
 
 function generateTasks(n: number, completed = false): TaskProps[] {
