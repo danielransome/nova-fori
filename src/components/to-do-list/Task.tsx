@@ -1,18 +1,20 @@
 import React from 'react'
 
 export type TaskProps = {
+  id: string
   description: string
   completed: boolean
-  onToggleCompleted: () => void
+  onToggleCompleted: (id: string) => void
 }
 
 const Task: React.FC<TaskProps> = ({
   description,
   completed,
   onToggleCompleted,
+  id,
 }) => {
   return (
-    <div>
+    <div data-id={id}>
       <h3>{description}</h3>
 
       <label>
@@ -20,7 +22,7 @@ const Task: React.FC<TaskProps> = ({
         <input
           type="checkbox"
           checked={completed}
-          onChange={() => onToggleCompleted()}
+          onChange={() => onToggleCompleted(id)}
         />
       </label>
     </div>
